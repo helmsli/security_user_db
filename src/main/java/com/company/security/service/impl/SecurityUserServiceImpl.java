@@ -16,6 +16,7 @@ import com.company.security.mapper.SecurityUserEmailMapper;
 import com.company.security.mapper.SecurityUserIdnoMapper;
 import com.company.security.mapper.SecurityUserMapper;
 import com.company.security.mapper.SecurityUserPhoneMapper;
+import com.company.security.service.SecurityUserCacheService;
 import com.company.security.service.SecurityUserService;
 import com.company.security.utils.SecurityUserAlgorithm;
 @Service("securityUserService")
@@ -30,6 +31,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	
 	@Autowired
 	private SecurityUserIdnoMapper securityUserIdnoMapper;
+	
+	@Autowired
+	private SecurityUserCacheService securityUserCacheService;
 	
 	@Value("${db.dbUserkey}")  
 	private String userKey;
@@ -128,7 +132,13 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			{
 				securityUser.setPassword(newpasword);
 				int updateNum = securityUserMapper.updatePassword(securityUser);
-				return (updateNum==1);
+				boolean bRet = (updateNum==1); 
+				//更新缓存中的密码
+				if(bRet)
+				{
+					this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(), System.currentTimeMillis());
+				}
+				return bRet;
 			}
 			
 		}		
@@ -147,15 +157,27 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setPassword(newpasword);
 		securityUser.setPasswordext("1.0");
 		int updateNum = securityUserMapper.updatePassword(securityUser);
-		return (updateNum==1);		
+		//更新缓存中的密码
+		boolean bRet = (updateNum==1);
+		if(bRet)
+		{
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(), System.currentTimeMillis());
+		}
+		return bRet;		
 	
 	}
 
 	@Override
 	public int updateUserBasicInfo(SecurityUser securityUser) {
 		// TODO Auto-generated method stub
-		return securityUserMapper.updateSecurityUser(securityUser);
-		
+		int bRet =  securityUserMapper.updateSecurityUser(securityUser);		
+	    boolean isSuccess = (bRet ==1);
+	    if(isSuccess)
+	    {
+	    	this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+	    }
+	    	
+	    return bRet;
 	}
 
 	/**
@@ -174,9 +196,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setUserId(userId);
 		securityUser.setEmail(email);
 		securityUser.setEmailverified((int)(status&0xff));
-		int verfyResult = securityUserMapper.verifyEmail(securityUser);
+		int verifyResult = securityUserMapper.verifyEmail(securityUser);
 		//如果更新成功,并且验证状态成功
-		if(verfyResult==1&& status == securityUser.verified_Success)
+		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
 			//查询是否有email和ID的对应关系
 			List<SecurityUserEmail> userEmails = securityUserEmailMapper.selectUserId(email);
@@ -195,10 +217,15 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				securityUserEmail.setUserId(userId);
 				securityUserEmail.setEmail(email);
 				securityUserEmailMapper.insertUserEmail(securityUserEmail);
-				verfyResult = 1;
+				verifyResult = 1;
 			}
 		}
-		return verfyResult;
+		if(verifyResult==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+		    
+		}
+		return verifyResult;
 	}
 		
 	
@@ -210,6 +237,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		if(verfyResult==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(userId, System.currentTimeMillis());
 		}
 		return verfyResult;
 	}
@@ -227,11 +258,13 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			//查询是否有email和ID的对应关系
 			securityUserEmailMapper.deleteUserEmail(email);
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
 		}
 		return verfyResult;
 	
 	}
-
+	
 	/**
 	 * 
 	 * @param userId
@@ -250,9 +283,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setPhone(phone);
 		securityUser.setPhoneccode(countryCode);
 		securityUser.setPhoneverified((int)(status&0xff));
-		int verfyResult = securityUserMapper.verifyPhone(securityUser);
+		int verifyResult = securityUserMapper.verifyPhone(securityUser);
 		//如果更新成功,并且验证状态成功
-		if(verfyResult==1&& status == securityUser.verified_Success)
+		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
 			//查询是否有email和ID的对应关系
 			List<SecurityUserPhone> userIds = this.securityUserPhoneMapper.selectUserId(phone);
@@ -270,10 +303,15 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				userMaps.setUserId(userId);
 				userMaps.setPhone(phone);
 				securityUserPhoneMapper.insertUserPhone(userMaps);
-				verfyResult = 1;
+				verifyResult = 1;
 			}
 		}
-		return verfyResult;
+		if(verifyResult==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
+		}
+		return verifyResult;
 	}
 	
 	
@@ -291,6 +329,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if(ret==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
+		}
 		return ret;
 	}
 
@@ -302,14 +344,16 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setPhone("");
 		securityUser.setPhoneccode("");
 		securityUser.setPhoneverified(SecurityUser.verified_Fail);
-		int verfyResult = securityUserMapper.verifyPhone(securityUser);
+		int verifyResult = securityUserMapper.verifyPhone(securityUser);
 		//如果更新成功,并且验证状态成功
-		if(verfyResult==1)
+		if(verifyResult==1)
 		{
 			//查询是否有email和ID的对应关系
 			securityUserPhoneMapper.deleteUserPhone(phone);
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
 		}
-		return verfyResult;
+		return verifyResult;
 	
 	}
 	
@@ -331,9 +375,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setIdtype(idType);
 		securityUser.setIdno(idNo);
 		securityUser.setIdverified((int)(status&0xff));
-		int verfyResult = securityUserMapper.verifyIdNo(securityUser);
+		int verifyResult = securityUserMapper.verifyIdNo(securityUser);
 		//如果更新成功,并且验证状态成功
-		if(verfyResult==1&& status == securityUser.verified_Success)
+		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
 			//查询是否有email和ID的对应关系
 			List<SecurityUserIdno> userIds = this.securityUserIdnoMapper.selectUserId(SecurityUserIdno.getIdtotalno(idType, idNo));
@@ -351,10 +395,16 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				userMaps.setUserId(userId);
 				userMaps.setIdtotalno(idType, idNo);
 				securityUserIdnoMapper.insertUserIdNo(userMaps);
-				verfyResult = 1;
+				
+				verifyResult = 1;
 			}
 		}
-		return verfyResult;
+		if(verifyResult==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
+		}
+		return verifyResult;
 	}
 	
 	
@@ -367,6 +417,11 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		if(ret==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
+			
 		}
 		return ret;
 	}
@@ -384,6 +439,8 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			//查询是否有email和ID的对应关系
 			this.securityUserIdnoMapper.deleteUserIdNo(SecurityUserIdno.getIdtotalno(idType, idNo));
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
 		}
 		return verfyResult;
 	
@@ -391,11 +448,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	@Override
 	public int updateStatus(long userId, int status) {
 		// TODO Auto-generated method stub
-		
 		return this.securityUserMapper.updateStatus(userId, status);
 	}
 	@Override
-	
 	public int registerUserByPhone(SecurityUser securityUser)
 	{
 		int ret=SecurityUserConst.RESULT_Error_DbError;
@@ -406,9 +461,13 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			e.printStackTrace();
 			ret = SecurityUserConst.RESULT_Error_DbError;
 		}
+		if(ret==SecurityUserConst.RESULT_SUCCESS)
+		{
+			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			
+		}
 		return ret;
 	}
-	
 	
 	@Transactional 
 	public int innerregisterUserByPhone(SecurityUser securityUser)
@@ -435,6 +494,17 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			this.securityUserPhoneMapper.insertUserPhone(securityUserPhone);
 		}
 		return SecurityUserConst.RESULT_SUCCESS;
+	}
+	@Override
+	public int updateRoles(long userId,String roles)
+	{
+		
+		int idS = this.securityUserMapper.updateRoles(userId, roles);
+		if(idS==1)
+		{
+			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
+		}
+		return idS;
 	}
 
 }

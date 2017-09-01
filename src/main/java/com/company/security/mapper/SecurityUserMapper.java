@@ -94,6 +94,11 @@ public interface SecurityUserMapper {
 	 */
 	@Update("update security_user set status=#{status} where userId = #{userId}")
 	public int updateStatus(@Param(value="userId")long userId,@Param(value="status")int status);
+	
+	@Update("update security_user set roles=#{roles} where userId = #{userId}")
+	public int updateRoles(@Param(value="userId")long userId,@Param(value="roles")String roles);
+	
+	
 	/**
 	 * 删除用户信息
 	 * @param userId

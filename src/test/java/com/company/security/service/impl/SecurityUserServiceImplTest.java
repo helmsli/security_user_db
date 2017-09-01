@@ -14,12 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.company.security.Const.SecurityUserConst;
+import com.company.security.domain.LoginUser;
 import com.company.security.domain.SecurityUser;
 import com.company.security.domain.SecurityUserEmail;
 import com.company.security.domain.SecurityUserPhone;
 import com.company.security.mapper.SecurityUserEmailMapper;
 import com.company.security.mapper.SecurityUserMapper;
 import com.company.security.mapper.SecurityUserPhoneMapper;
+import com.company.security.service.SecurityUserCacheService;
 import com.company.security.service.SecurityUserService;
 import com.company.security.utils.SecurityUserAlgorithm;
 @RunWith(SpringRunner.class)
@@ -40,6 +42,9 @@ public class SecurityUserServiceImplTest {
 	
 	@Value("${hessian.transferUserKey}")  
 	private String transferUserKey;
+	
+	@Autowired
+	private SecurityUserCacheService securityUserCacheService;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -85,6 +90,7 @@ public class SecurityUserServiceImplTest {
 		
 		return securityUser;
 	}
+	
 	/**
 	 * 测试正常的电话号码注册流程
 	 */
@@ -135,6 +141,11 @@ public class SecurityUserServiceImplTest {
 		
 		//创建正常的号码
 		SecurityUser securityUser = createDefaultSecurityUser();
+		LoginUser loginUser = securityUser.getLoginUser();
+		securityUserCacheService.putBasicInfo(loginUser);
+		LoginUser cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+		assertEquals("testBindEmail redis loginuser not equal",loginUser.toString(),cacheLoginUser.toString());
+		
 		//删除数据库中的数据
 		securityUserMapper.deleteSecurityUser(securityUser.getUserId());
 		securityUserPhoneMapper.deleteUserPhone(securityUser.getPhone());
@@ -147,15 +158,22 @@ public class SecurityUserServiceImplTest {
 		List<SecurityUser> queryUserS = securityUserMapper.selectSecurityUser(securityUser.getUserId());
 		SecurityUser queryDbUser = queryUserS.get(0);
 		assertEquals("testUpdateStatus status not equal",SecurityUser.Status_needVerified,queryDbUser.getStatus());
-		
+		 cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+			assertTrue("testBindEmail redis loginuser not equal",cacheLoginUser==null);
+			
 	}
 
 	
 	@Test
 	public void testBindEmail() {
 		
+		
 		//创建正常的号码
 		SecurityUser securityUser = createDefaultSecurityUser();
+		LoginUser loginUser = securityUser.getLoginUser();
+		securityUserCacheService.putBasicInfo(loginUser);
+		LoginUser cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+		assertEquals("testBindEmail redis loginuser not equal",loginUser.toString(),cacheLoginUser.toString());
 		//删除数据库中的数据
 		securityUserMapper.deleteSecurityUser(securityUser.getUserId());
 		securityUserPhoneMapper.deleteUserPhone(securityUser.getPhone());
@@ -187,7 +205,10 @@ public class SecurityUserServiceImplTest {
 				
 		queryUserIds = securityUserEmailMapper.selectUserId(securityUser.getEmail());
 		assertEquals("testBindEmail email maps number error ",0,queryUserIds.size());
-				
+		
+		 cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+		assertTrue("testBindEmail redis loginuser not equal",cacheLoginUser==null);
+		
 	}
 	
 	@Test
@@ -195,6 +216,11 @@ public class SecurityUserServiceImplTest {
 		
 		//创建正常的号码
 		SecurityUser securityUser = createDefaultSecurityUser();
+		LoginUser loginUser = securityUser.getLoginUser();
+		securityUserCacheService.putBasicInfo(loginUser);
+		LoginUser cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+		assertEquals("testBindEmail redis loginuser not equal",loginUser.toString(),cacheLoginUser.toString());
+		
 		//删除数据库中的数据
 		securityUserMapper.deleteSecurityUser(securityUser.getUserId());
 		securityUserPhoneMapper.deleteUserPhone(securityUser.getPhone());
@@ -258,7 +284,9 @@ public class SecurityUserServiceImplTest {
 		transferCrc = SecurityUserAlgorithm.EncoderByMd5(this.transferUserKey, newpasword);
 		bret = securityUserService.checkPassword(securityUser.getUserId(), newpasword, transferCrc);
 		assertFalse("testCheckPassword reset old password can not check  error ",bret);
-		
+		 cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
+		assertTrue("testBindEmail redis loginuser not equal",cacheLoginUser==null);
+			
 	}
 
 }

@@ -630,6 +630,27 @@ public class SecurityUser implements Serializable {
 		return this.updatetime;
 	}
 
+	
+	public LoginUser getLoginUser()
+	{
+		LoginUser loginUser = new LoginUser();
+		loginUser.setAvatar(this.getAvatar());
+		loginUser.setDisplayname(this.getDisplayname());
+		loginUser.setEmail(this.getEmail());
+		loginUser.setEmailverified(this.getEmailverified());
+		loginUser.setLoginname(this.getLoginname());
+		loginUser.setPassword(this.getPassword());
+		loginUser.setPasswordext(this.getPasswordext());
+		loginUser.setPhone(this.getPhone());
+		loginUser.setPhoneccode(this.getPhoneccode());
+		loginUser.setPhoneverified(this.getPhoneverified());
+		loginUser.setRoles(this.getRoles());
+		loginUser.setSex(this.getSex());
+		loginUser.setStatus(this.getStatus());
+		loginUser.setUserId(this.getUserId());
+		return loginUser;
+	}
+
 	@Override
 	public String toString() {
 		return "SecurityUser [userId=" + userId + ", loginname=" + loginname + ", lastname=" + lastname + ", firstname="
@@ -641,7 +662,6 @@ public class SecurityUser implements Serializable {
 				+ ", roles=" + roles + ", extdate=" + extdate + ", createtime=" + createtime + ", createsource="
 				+ createsource + ", updatetime=" + updatetime + "]";
 	}
-
 	
 
 }

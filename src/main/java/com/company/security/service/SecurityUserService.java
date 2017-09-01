@@ -126,4 +126,12 @@ public interface SecurityUserService {
 	 */
 	public int updateStatus(long userId,int status);
 	
+	/**
+	 * 
+	 * @param userId
+	 * @param status
+	 * @return
+	 */
+	public int updateRoles(long userId,String roles);
+	
 }
