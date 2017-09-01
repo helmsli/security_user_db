@@ -160,7 +160,6 @@ public class SecurityUserServiceImplTest {
 		assertEquals("testUpdateStatus status not equal",SecurityUser.Status_needVerified,queryDbUser.getStatus());
 		 cacheLoginUser = securityUserCacheService.getBasicInfo(securityUser.getUserId());
 			assertTrue("testBindEmail redis loginuser not equal",cacheLoginUser==null);
-			
 	}
 
 	
