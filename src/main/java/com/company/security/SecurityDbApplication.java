@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan ("com.xinwei.lotteryDb")
-@MapperScan ("com.xinwei.lotteryDb.mapper")
+@ComponentScan ("com.company.security")
+@MapperScan ("com.company.security.mapper")
 @ImportResource ({ "classpath:hessian/hessian-client.xml", "classpath:hessian/hessian-server.xml" })
 public class SecurityDbApplication {
 

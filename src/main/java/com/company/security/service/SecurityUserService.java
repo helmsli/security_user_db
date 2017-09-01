@@ -5,6 +5,14 @@ import java.util.List;
 import com.company.security.domain.SecurityUser;
 
 public interface SecurityUserService {
+	
+	/**
+	 * 注册用户，电话号码已经被认证过了，调用该函数
+	 * @param security
+	 * @return
+	 */
+	public int registerUserByPhone(SecurityUser securityUser);
+	
 	/**
 	 * 
 	 * @param userId
@@ -16,13 +24,13 @@ public interface SecurityUserService {
 	 * @param phone
 	 * @return
 	 */
-	public SecurityUser selectUserByPhone(long phone);
+	public SecurityUser selectUserByPhone(String phone);
 	/**
 	 * 
 	 * @param email
 	 * @return
 	 */
-	public SecurityUser selectUserByemail(long email);
+	public SecurityUser selectUserByemail(String email);
 	/**
 	 * 
 	 * @param idType
@@ -34,7 +42,7 @@ public interface SecurityUserService {
 	 * 
 	 * @param userId
 	 * @param pasword
-	 * @param algorithm
+	 * @param algorithm  -- 加密校验字，用于比较是否验证的身份是合法的。约定好的字符串+pasword
 	 * @return
 	 */
 	public boolean  checkPassword(long userId,String pasword,String algorithm);
@@ -43,7 +51,7 @@ public interface SecurityUserService {
 	 * @param userId
 	 * @param newpasword
 	 * @param oldPassword
-	 * @param algorithm
+	 * @param algorithm -- 加密校验字， 约定好的字符串+newpasword
 	 * @return
 	 */
 	public boolean  updatePassword(long userId,String newpasword,String oldPassword,String algorithm);
@@ -68,7 +76,16 @@ public interface SecurityUserService {
 	 * @param status
 	 * @return
 	 */
-	public int updateEmail(long userId,String email,int status);
+	public int bindEmail(long userId,String email,int status);
+	
+	/**
+	 * 解绑邮箱
+	 * @param userId
+	 * @param email
+	 * @return
+	 */
+	public int unbindEmail(long userId,String email);
+	
 	/**
 	 * 
 	 * @param userId
@@ -77,7 +94,10 @@ public interface SecurityUserService {
 	 * @param status
 	 * @return
 	 */
-	public int updatePhone(long userId,String countryCode,String phone,int status);
+	public int bindPhone(long userId,String countryCode,String phone,int status);
+	
+	public int unbindPhone(long userId,String countryCode,String phone);
+	
 	/**
 	 * 
 	 * @param userId
@@ -86,7 +106,18 @@ public interface SecurityUserService {
 	 * @param status
 	 * @return
 	 */
-	public int updateIdNo(long userId,String idType,String idNo,int status);
+	public int bindIdNo(long userId,int idType,String idNo,int status);
+	
+	/**
+	 * 
+	 * @param userId
+	 * @param idType
+	 * @param idNo
+	 * @param status
+	 * @return
+	 */
+	public int unbindIdNo(long userId,int idType,String idNo);
+	
 	/**
 	 * 
 	 * @param userId

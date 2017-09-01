@@ -11,6 +11,30 @@ import java.util.Date;
  */
 public class SecurityUser implements Serializable {
 
+	//正常
+	public static final int Status_OK = 0;
+	//需要认证
+	public static final int Status_needVerified = 1;
+	
+	//禁用
+	public static final int Status_suspend = 2;
+	
+	
+	
+	//phone,email,id认证成功
+	public static final int verified_Success = 1;
+	//认证失败
+	public static final int verified_Fail = 0;
+	//身份证
+	public static final int IDTYPE_IdCard = 0;
+	//护照
+	public static final int IDTYPE_Passport = 1;
+	
+	//男
+	public static final int SEX_Male=0;
+	//女
+	public static final int SEX_FeMale=0;
+	
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
@@ -39,19 +63,19 @@ public class SecurityUser implements Serializable {
 	private String email;
 
 	/** 邮箱认证状态. */
-	private Byte emailverified;
+	private int emailverified;
 
-	/** 电话号码. */
+	/** 电话号码. 带国家码的号码，国家码开头是00*/
 	private String phone;
 
 	/** 电话号码国家码. */
 	private String phoneccode;
 
 	/** 电话号码认证状态. */
-	private Byte phoneverified;
+	private int phoneverified;
 
 	/** 性别. */
-	private Byte sex;
+	private int sex;
 
 	/** 生日. */
 	private Date birthday;
@@ -69,13 +93,13 @@ public class SecurityUser implements Serializable {
 	private String idno;
 
 	/** 证件类型. */
-	private Byte idtype;
+	private int idtype;
 
 	/** 证件是否审核过. */
-	private Byte idverified;
+	private int idverified;
 
 	/** 账户状态. */
-	private Byte status;
+	private int status;
 
 	/** 拥有的角色. */
 	private String roles;
@@ -219,7 +243,21 @@ public class SecurityUser implements Serializable {
 	 *            密码扩展字段
 	 */
 	public void setPasswordext(String passwordext) {
-		this.passwordext = passwordext;
+		if(passwordext!=null)
+		{
+			if(passwordext.length()>8)
+			{
+				this.passwordext = passwordext.substring(0, 8);
+			}
+			else
+			{
+				this.passwordext=passwordext;
+			}
+		}
+		else
+		{
+			this.passwordext = passwordext;
+		}
 	}
 
 	/**
@@ -256,7 +294,7 @@ public class SecurityUser implements Serializable {
 	 * @param emailverified
 	 *            邮箱认证状态
 	 */
-	public void setEmailverified(Byte emailverified) {
+	public void setEmailverified(int emailverified) {
 		this.emailverified = emailverified;
 	}
 
@@ -265,7 +303,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 邮箱认证状态
 	 */
-	public Byte getEmailverified() {
+	public int getEmailverified() {
 		return this.emailverified;
 	}
 
@@ -313,7 +351,7 @@ public class SecurityUser implements Serializable {
 	 * @param phoneverified
 	 *            电话号码认证状态
 	 */
-	public void setPhoneverified(Byte phoneverified) {
+	public void setPhoneverified(int phoneverified) {
 		this.phoneverified = phoneverified;
 	}
 
@@ -322,7 +360,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 电话号码认证状态
 	 */
-	public Byte getPhoneverified() {
+	public int getPhoneverified() {
 		return this.phoneverified;
 	}
 
@@ -332,7 +370,7 @@ public class SecurityUser implements Serializable {
 	 * @param sex
 	 *            性别
 	 */
-	public void setSex(Byte sex) {
+	public void setSex(int sex) {
 		this.sex = sex;
 	}
 
@@ -341,7 +379,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 性别
 	 */
-	public Byte getSex() {
+	public int getSex() {
 		return this.sex;
 	}
 
@@ -446,7 +484,7 @@ public class SecurityUser implements Serializable {
 	 * @param idtype
 	 *            证件类型
 	 */
-	public void setIdtype(Byte idtype) {
+	public void setIdtype(int idtype) {
 		this.idtype = idtype;
 	}
 
@@ -455,7 +493,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 证件类型
 	 */
-	public Byte getIdtype() {
+	public int getIdtype() {
 		return this.idtype;
 	}
 
@@ -465,7 +503,7 @@ public class SecurityUser implements Serializable {
 	 * @param idverified
 	 *            证件是否审核过
 	 */
-	public void setIdverified(Byte idverified) {
+	public void setIdverified(int idverified) {
 		this.idverified = idverified;
 	}
 
@@ -474,7 +512,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 证件是否审核过
 	 */
-	public Byte getIdverified() {
+	public int getIdverified() {
 		return this.idverified;
 	}
 
@@ -484,7 +522,7 @@ public class SecurityUser implements Serializable {
 	 * @param status
 	 *            账户状态
 	 */
-	public void setStatus(Byte status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -493,7 +531,7 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 账户状态
 	 */
-	public Byte getStatus() {
+	public int getStatus() {
 		return this.status;
 	}
 
@@ -592,5 +630,18 @@ public class SecurityUser implements Serializable {
 		return this.updatetime;
 	}
 
+	@Override
+	public String toString() {
+		return "SecurityUser [userId=" + userId + ", loginname=" + loginname + ", lastname=" + lastname + ", firstname="
+				+ firstname + ", displayname=" + displayname + ", password=" + password + ", passwordext=" + passwordext
+				+ ", email=" + email + ", emailverified=" + emailverified + ", phone=" + phone + ", phoneccode="
+				+ phoneccode + ", phoneverified=" + phoneverified + ", sex=" + sex + ", birthday=" + birthday
+				+ ", avatar=" + avatar + ", homeaddress=" + homeaddress + ", businessaddress=" + businessaddress
+				+ ", idno=" + idno + ", idtype=" + idtype + ", idverified=" + idverified + ", status=" + status
+				+ ", roles=" + roles + ", extdate=" + extdate + ", createtime=" + createtime + ", createsource="
+				+ createsource + ", updatetime=" + updatetime + "]";
+	}
+
+	
 
 }

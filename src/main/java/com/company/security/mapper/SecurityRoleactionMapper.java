@@ -24,11 +24,11 @@ public interface SecurityRoleactionMapper {
 	 * @return
 	 */
 	@Select("SELECT * FROM security_roleaction where roleId= #{roleid}")
-	public List<SecurityRoleaction> selectSecurityRoleaction(long roleid);
+	public List<SecurityRoleaction> selectRoleAction(long roleid);
 	
 	
 	@Select("SELECT * FROM security_roleaction where roleId= #{roleid} and actionI#{actionid}")
-	public List<SecurityRoleaction> selectSecurityRoleaction(long roleid,long actionid);
+	public List<SecurityRoleaction> selectRoleOneAction(long roleid,long actionid);
 	
 	/**
 	 * 更新制定的action
@@ -45,9 +45,9 @@ public interface SecurityRoleactionMapper {
 	 * @return
 	 */
 	@Delete("delete FROM security_roleaction where roleId= #{roleid} and actionI#{actionid}")
-	public int deleteSecurityRoleaction(long roleid,long actionid);
+	public int deleteRoleOneAction(long roleid,long actionid);
 
 	@Delete("delete FROM security_roleaction where roleId= #{roleid}")
-	public int deleteSecurityRoleaction(long roleid);
+	public int deleteRoleAllAction(long roleid);
 
 }

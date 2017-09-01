@@ -17,7 +17,7 @@ public class SecurityUserPhone implements Serializable {
 	private String phone;
 
 	/** 用户ID. */
-	private Long userId;
+	private long userId;
 
 	/**
 	 * Constructor.
@@ -50,7 +50,7 @@ public class SecurityUserPhone implements Serializable {
 	 * @param userId
 	 *            用户ID
 	 */
-	public void setUserId(Long userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -59,7 +59,7 @@ public class SecurityUserPhone implements Serializable {
 	 * 
 	 * @return 用户ID
 	 */
-	public Long getUserId() {
+	public long getUserId() {
 		return this.userId;
 	}
 

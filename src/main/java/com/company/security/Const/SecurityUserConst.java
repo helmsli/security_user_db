@@ -10,4 +10,11 @@ public class SecurityUserConst {
     public static final int RESULT_Error_roleNotExist = RESULT_Error_startCode+1;
     
     
+    public static final int RESULT_Error_PhoneExist = RESULT_Error_startCode+2;
+    public static final int RESULT_Error_PhoneError = RESULT_Error_startCode+3;
+    
+    public static final int RESULT_Error_DbError = RESULT_Error_startCode+5;
+    
+    public static final int RESULT_Error_PhoneNotVerified = RESULT_Error_startCode+6;
+    
 }

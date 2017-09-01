@@ -36,7 +36,7 @@ public class SecurityRoleServiceImpl implements SecurityRoleService {
 	@Override
 	public int deleteRoleAllAction(long roleid) {
 		// TODO Auto-generated method stub
-		return securityRoleactionMapper.deleteSecurityRoleaction(roleid);
+		return securityRoleactionMapper.deleteRoleAllAction(roleid);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SecurityRoleServiceImpl implements SecurityRoleService {
 		for(SecurityRoleaction securityRoleaction:securityRoleactions)
 		{
 			
-			List<SecurityRoleaction> queryRoleactions=securityRoleactionMapper.selectSecurityRoleaction(securityRoleaction.getRoleid(), securityRoleaction.getActionid());
+			List<SecurityRoleaction> queryRoleactions=securityRoleactionMapper.selectRoleOneAction(securityRoleaction.getRoleid(), securityRoleaction.getActionid());
 			if(queryRoleactions!=null&&queryRoleactions.size()>0)
 			{
 				securityRoleactionMapper.insertSecurityRoleaction(securityRoleaction);
@@ -69,7 +69,7 @@ public class SecurityRoleServiceImpl implements SecurityRoleService {
 	@Transactional 
 	public int refreshSecurityRole(int roleId, List<SecurityRoleaction> securityRoleactions) {
 		// TODO Auto-generated method stub
-		securityRoleactionMapper.deleteSecurityRoleaction(roleId);
+		securityRoleactionMapper.deleteRoleAllAction(roleId);
 		int retNumber = 0;
 		
 		for(SecurityRoleaction securityRoleaction:securityRoleactions)

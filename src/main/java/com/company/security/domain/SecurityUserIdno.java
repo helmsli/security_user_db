@@ -17,7 +17,7 @@ public class SecurityUserIdno implements Serializable {
 	private String idtotalno;
 
 	/** 用户ID. */
-	private Long userId;
+	private long userId;
 
 	/**
 	 * Constructor.
@@ -35,6 +35,34 @@ public class SecurityUserIdno implements Serializable {
 		this.idtotalno = idtotalno;
 	}
 
+	
+	public static String getIdtotalno(int idtype,String idNo)
+	{
+		return (idtype + "*#" + idNo);
+	}
+	
+	public void setIdtotalno(int idtype,String idNo) {
+		setIdtotalno(idtype + "*#" + idNo);
+	}
+	
+	public int getIdType() {
+		String[] strS = idtotalno.split("*#");
+		if(strS.length==2)
+		{
+			return Integer.parseInt(strS[0]);
+		}
+		return -1;
+	}
+	public String getIdNo() {
+		String[] strS = idtotalno.split("*#");
+		if(strS.length==2)
+		{
+			return (strS[1]);
+		}
+		return "";
+	}
+	
+
 	/**
 	 * Get the 护照总号码.
 	 * 
@@ -50,7 +78,7 @@ public class SecurityUserIdno implements Serializable {
 	 * @param userId
 	 *            用户ID
 	 */
-	public void setUserId(Long userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -59,9 +87,10 @@ public class SecurityUserIdno implements Serializable {
 	 * 
 	 * @return 用户ID
 	 */
-	public Long getUserId() {
+	public long getUserId() {
 		return this.userId;
 	}
+
 
 
 }
