@@ -1,12 +1,30 @@
 package com.company.security.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class LoginUser implements Serializable{
+	/**
+	 * email登录
+	 */
+	public static final int LoginType_email = 1;
+	/**
+	 * 电话登录
+	 */
+	public static final int LoginType_phone = 2;
+	/**
+	 * id登录
+	 */
+	public static final int LoginType_userid = 3;
 	/** 用户ID. */
 	private long userId;
-	/** 登录的名字. */
+	/** 登录的名字. 当前登录的名字*/
 	private String loginname;
+	/**
+	 * 当前登录的名字的类型
+	 */
+	private int loginType;
+	
 	/** 显示名字. */
 	private String displayname;
 	
@@ -38,7 +56,16 @@ public class LoginUser implements Serializable{
 
 	/** 拥有的角色. */
 	private String roles;
-
+	/**
+	 * 登录时间
+	 */
+	private Date loginTime;
+	
+	private int loginDeviceType;
+	
+	private String loginDeviceId;
+	
+	private String ip;
 	
 	public long getUserId() {
 		return userId;
@@ -124,13 +151,30 @@ public class LoginUser implements Serializable{
 	public void setRoles(String roles) {
 		this.roles = roles;
 	}
+	public int getLoginType() {
+		return loginType;
+	}
+	public void setLoginType(int loginType) {
+		this.loginType = loginType;
+	}
+	
+	
+	public Date getLoginTime() {
+		return loginTime;
+	}
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+	
 	@Override
 	public String toString() {
-		return "LoginUser [userId=" + userId + ", loginname=" + loginname + ", displayname=" + displayname + ", phone="
-				+ phone + ", phoneccode=" + phoneccode + ", phoneverified=" + phoneverified + ", avatar=" + avatar
-				+ ", sex=" + sex + ", email=" + email + ", emailverified=" + emailverified + ", password=" + password
-				+ ", passwordext=" + passwordext + ", status=" + status + ", roles=" + roles + "]";
+		return "LoginUser [userId=" + userId + ", loginname=" + loginname + ", loginType=" + loginType
+				+ ", displayname=" + displayname + ", phone=" + phone + ", phoneccode=" + phoneccode
+				+ ", phoneverified=" + phoneverified + ", avatar=" + avatar + ", sex=" + sex + ", email=" + email
+				+ ", emailverified=" + emailverified + ", password=" + password + ", passwordext=" + passwordext
+				+ ", status=" + status + ", roles=" + roles + ", loginTime=" + loginTime + "]";
 	}
+	
     
 	
 }

@@ -2,7 +2,7 @@ package com.company.security.Const;
 
 public class SecurityUserConst {
 	
-	
+	//范围1000 到2000
 	//成功
     public static final int RESULT_SUCCESS = 0;
     //role不存在

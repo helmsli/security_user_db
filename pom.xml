@@ -80,7 +80,14 @@
 			<artifactId>hessian</artifactId>
 			<version>4.0.38</version>
 		</dependency>
-        
+         <!--引入lib目录中的第三方包 -->
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>security_access_service</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/security_access_service.jar</systemPath>
+		</dependency>
 		
 	</dependencies>
 
@@ -91,6 +98,21 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<!-- 引入第三方包，打包需要引入 -->
+		<resources>
+			<resource>
+				<directory>lib</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>BOOT-INF/classes/</targetPath>
+			</resource>
+		</resources>
+		
 	</build>
 
 

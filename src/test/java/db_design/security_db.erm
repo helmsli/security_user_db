@@ -22,8 +22,8 @@
 	</page_setting>
 	<category_index>0</category_index>
 	<zoom>1.0</zoom>
-	<x>82</x>
-	<y>302</y>
+	<x>0</x>
+	<y>151</y>
 	<default_color>
 		<r>128</r>
 		<g>128</g>
@@ -94,7 +94,7 @@
 				<is_use_logical_name>true</is_use_logical_name>
 			</export_excel_setting>
 			<export_html_setting>
-				<output_dir></output_dir>
+				<output_dir>C:\Users\helmsli\Downloads</output_dir>
 				<with_category_image>true</with_category_image>
 				<with_image>true</with_image>
 				<is_open_after_saved>true</is_open_after_saved>
@@ -146,7 +146,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2017-08-28 17:11:07</creation_date>
-			<updated_date>2017-09-01 11:39:27</updated_date>
+			<updated_date>2017-09-02 11:21:06</updated_date>
 			<model_property>
 				<name>Project Name</name>
 				<value></value>
@@ -1052,7 +1052,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>7</word_id>
+					<word_id>8</word_id>
 					<id>7</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -1351,7 +1351,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>8</word_id>
+					<word_id>7</word_id>
 					<id>15</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -2574,7 +2574,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>8</word_id>
+					<word_id>7</word_id>
 					<id>47</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
