@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.util.DigestUtils;
 
 public  class SecurityUserAlgorithm {
+	public static final String Prop_split="*";
 	/**
 	 * 采用Md5加密
 	 * @param key

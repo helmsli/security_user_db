@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.company.security.Const.SecurityUserConst;
+import com.company.security.domain.LoginUser;
 import com.company.security.domain.SecurityUser;
 import com.company.security.domain.SecurityUserEmail;
 import com.company.security.domain.SecurityUserIdno;
@@ -136,7 +137,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				//更新缓存中的密码
 				if(bRet)
 				{
-					this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(), System.currentTimeMillis());
+					LoginUser loginUser = new LoginUser();
+					loginUser.setUserId(securityUser.getUserId());
+					loginUser.setPhone(securityUser.getPhone());
+					this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
 				}
 				return bRet;
 			}
@@ -145,6 +149,16 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		return false;
 	}
 
+	@Override
+	public boolean resetPasswordByPhone(String phone, String newpasword, String algorithm) {
+		// TODO Auto-generated method stub
+		SecurityUser SecurityUser = this.selectUserByPhone(phone);
+		if(SecurityUser!=null)
+		{
+			return this.resetPassword(SecurityUser.getUserId(), newpasword, algorithm);
+		}
+		return false;
+	}
 	@Override
 	public boolean resetPassword(long userId, String newpasword, String algorithm) {
 		if(!SecurityUserAlgorithm.checkByMd5(this.transferUserKey, newpasword, algorithm))
@@ -161,7 +175,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		boolean bRet = (updateNum==1);
 		if(bRet)
 		{
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(), System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
 		}
 		return bRet;		
 	
@@ -174,7 +191,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	    boolean isSuccess = (bRet ==1);
 	    if(isSuccess)
 	    {
-	    	this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+	    	LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+	    	this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 	    }
 	    	
 	    return bRet;
@@ -222,7 +242,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(verifyResult==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 		    
 		}
 		return verifyResult;
@@ -240,7 +263,15 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(verfyResult==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(userId, System.currentTimeMillis());
+			SecurityUser securityUser = this.selectUserById(userId);
+			if(securityUser!=null)
+			{
+				LoginUser loginUser = new LoginUser();
+				loginUser.setUserId(securityUser.getUserId());
+				loginUser.setPhone(securityUser.getPhone());
+				
+				this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
+			}
 		}
 		return verfyResult;
 	}
@@ -258,7 +289,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			//查询是否有email和ID的对应关系
 			securityUserEmailMapper.deleteUserEmail(email);
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return verfyResult;
@@ -308,7 +342,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(verifyResult==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return verifyResult;
@@ -331,7 +368,15 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(ret==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
+			SecurityUser securityUser = this.selectUserById(userId);
+			if(securityUser!=null)
+			{
+				LoginUser loginUser = new LoginUser();
+				loginUser.setUserId(securityUser.getUserId());
+				loginUser.setPhone(securityUser.getPhone());
+				
+				this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
+			}
 		}
 		return ret;
 	}
@@ -350,7 +395,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			//查询是否有email和ID的对应关系
 			securityUserPhoneMapper.deleteUserPhone(phone);
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return verifyResult;
@@ -401,7 +449,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(verifyResult==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return verifyResult;
@@ -420,8 +471,15 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(ret==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
-			
+			SecurityUser securityUser = this.selectUserById(userId);
+			if(securityUser!=null)
+			{
+				LoginUser loginUser = new LoginUser();
+				loginUser.setUserId(securityUser.getUserId());
+				loginUser.setPhone(securityUser.getPhone());
+				
+				this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
+			}
 		}
 		return ret;
 	}
@@ -439,7 +497,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			//查询是否有email和ID的对应关系
 			this.securityUserIdnoMapper.deleteUserIdNo(SecurityUserIdno.getIdtotalno(idType, idNo));
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return verfyResult;
@@ -463,7 +524,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		if(ret==SecurityUserConst.RESULT_SUCCESS)
 		{
-			this.securityUserCacheService.putLastModifyTime(securityUser.getUserId(),System.currentTimeMillis());
+			LoginUser loginUser = new LoginUser();
+			loginUser.setUserId(securityUser.getUserId());
+			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.putLastModifyTime(loginUser,System.currentTimeMillis());
 			
 		}
 		return ret;
@@ -502,9 +566,19 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		int idS = this.securityUserMapper.updateRoles(userId, roles);
 		if(idS==1)
 		{
-			this.securityUserCacheService.putLastModifyTime(userId,System.currentTimeMillis());
+			SecurityUser securityUser = this.selectUserById(userId);
+			if(securityUser!=null)
+			{
+				LoginUser loginUser = new LoginUser();
+				loginUser.setUserId(securityUser.getUserId());
+				loginUser.setPhone(securityUser.getPhone());
+				
+				this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
+			}
 		}
 		return idS;
 	}
+
+	
 
 }

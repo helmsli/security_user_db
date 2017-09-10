@@ -63,6 +63,17 @@ public interface SecurityUserService {
 	 * @return
 	 */
 	public boolean  resetPassword(long userId,String newpasword,String algorithm);
+	
+	/**
+	 * 
+	 * @param userId
+	 * @param newpasword
+	 * @param algorithm
+	 * @return
+	 */
+	public boolean  resetPasswordByPhone(String phone,String newpasword,String algorithm);
+	
+	
 	/**
 	 * 
 	 * @param securityUser
