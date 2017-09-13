@@ -22,4 +22,9 @@
 		<property name="service" ref="userBalanceLogMapperImpl" />
 	</bean>
  	-->
+ 	<bean name="/securitydb/hessian/UserMainDbService"
+		class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<property name="serviceInterface" value="com.company.security.service.SecurityUserService" />
+		<property name="service" ref="securityUserService" />
+	</bean>
 </beans>

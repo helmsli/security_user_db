@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.company.security.Const.SecurityUserConst;
 import com.company.security.domain.LoginUser;
@@ -37,10 +38,47 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	private SecurityUserCacheService securityUserCacheService;
 	
 	@Value("${db.dbUserkey}")  
-	private String userKey;
+	private String dbUserKey;
 	
 	@Value("${hessian.transferUserKey}")  
 	private String transferUserKey;
+	
+	/**
+	 * 比较数据库是否有人篡改过
+	 * @param securityUser
+	 * @return
+	 */
+	protected boolean checkDbCrc(SecurityUser securityUser)
+	{
+		String nowKey=getDbUserCrcKey(securityUser);
+		if(!nowKey.equalsIgnoreCase(securityUser.getPasswordext()))
+		{
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * 获取数据库签名
+	 * @param securityUser
+	 * @return
+	 */
+	protected String getDbUserCrcKey(SecurityUser securityUser)
+	{
+		try {
+			StringBuilder str = new StringBuilder();
+			str.append(securityUser.getUserId());
+			str.append("*");
+			if(!StringUtils.isEmpty(securityUser.getPassword()))
+			{
+				str.append(securityUser.getPassword());
+			}
+			return SecurityUserAlgorithm.EncoderByMd5(this.dbUserKey,str.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
 	
 	@Override
 	public SecurityUser selectUserById(long userId) {
@@ -48,7 +86,11 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		List<SecurityUser> securityUsers= securityUserMapper.selectSecurityUser(userId);
 		if(securityUsers!=null&& securityUsers.size()>0)
 		{
-			return securityUsers.get(0);
+			
+			if(this.checkDbCrc(securityUsers.get(0)))
+			{
+				return securityUsers.get(0);
+			}
 		}
 		return null;
 	}
@@ -60,7 +102,14 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(userids!=null&&userids.size()>0)
 		{
 			SecurityUserPhone securityUserPhone=userids.get(0);
-			return selectUserById(securityUserPhone.getUserId());
+			SecurityUser securityUser=  selectUserById(securityUserPhone.getUserId());
+			if(securityUser!=null)
+			{
+				if(phone.equalsIgnoreCase(securityUser.getPhone()))
+				{
+					return securityUser;
+				}
+			}
 		}
 		return null;
 	}
@@ -73,7 +122,14 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(userids!=null&&userids.size()>0)
 		{
 			SecurityUserEmail userid=userids.get(0);
-			return selectUserById(userid.getUserId());
+			SecurityUser securityUser=  selectUserById(userid.getUserId());
+			if(securityUser!=null)
+			{
+				if(email.equalsIgnoreCase(securityUser.getEmail()))
+				{
+					return securityUser;
+				}
+			}
 		}
 		return null;
 	}
@@ -85,13 +141,20 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(userids!=null&&userids.size()>0)
 		{
 			SecurityUserIdno userid=userids.get(0);
-			return selectUserById(userid.getUserId());
+			SecurityUser securityUser= selectUserById(userid.getUserId());
+			if(securityUser!=null)
+			{
+				if(idNo.equalsIgnoreCase(securityUser.getIdno()))
+				{
+					return securityUser;
+				}
+			}
 		}
 		return null;
 	}
 
 
-	@Override
+	
 	public boolean checkPassword(long userId, String pasword, String algorithm) {
 		// TODO Auto-generated method stub
 		if(!SecurityUserAlgorithm.checkByMd5(this.transferUserKey, pasword, algorithm))
@@ -102,7 +165,8 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(securityUsers!=null&& securityUsers.size()>0)
 		{
 			SecurityUser securityUser =  securityUsers.get(0);
-			if(pasword.equalsIgnoreCase(securityUser.getPassword()))
+			boolean crcOk = this.checkDbCrc(securityUser);
+			if(crcOk&&pasword.equalsIgnoreCase(securityUser.getPassword()))
 			{
 				
 				return true;
@@ -128,10 +192,13 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(securityUsers!=null&& securityUsers.size()>0)
 		{
 			SecurityUser securityUser =  securityUsers.get(0);
+			boolean crcOk = this.checkDbCrc(securityUser);
 			//比较老的密码是否是正确的。
-			if(oldPassword.equalsIgnoreCase(securityUser.getPassword()))
+			if(crcOk&&oldPassword.equalsIgnoreCase(securityUser.getPassword()))
 			{
+				securityUser.setOldPasswordext(oldPassword);
 				securityUser.setPassword(newpasword);
+				securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 				int updateNum = securityUserMapper.updatePassword(securityUser);
 				boolean bRet = (updateNum==1); 
 				//更新缓存中的密码
@@ -152,10 +219,11 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	@Override
 	public boolean resetPasswordByPhone(String phone, String newpasword, String algorithm) {
 		// TODO Auto-generated method stub
-		SecurityUser SecurityUser = this.selectUserByPhone(phone);
-		if(SecurityUser!=null)
+		List<SecurityUserPhone> userids = securityUserPhoneMapper.selectUserId(phone);
+		
+		if(userids!=null&& userids.size()>0)
 		{
-			return this.resetPassword(SecurityUser.getUserId(), newpasword, algorithm);
+			return this.resetPassword(userids.get(0).getUserId(), newpasword, algorithm);
 		}
 		return false;
 	}
@@ -165,11 +233,18 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			return false;
 		}
+		List<SecurityUser> securityUsers = this.securityUserMapper.selectPasswordByid(userId);
+		//如果用户不存在
+		if(securityUsers==null||securityUsers.size()==0)
+		{
+				return false;
+		}	
+		
 		//重置系统密码
-		SecurityUser securityUser =  new SecurityUser();
-		securityUser.setUserId(userId);
+		SecurityUser securityUser =  securityUsers.get(0);
+		securityUser.setOldPasswordext(securityUser.getPassword());
 		securityUser.setPassword(newpasword);
-		securityUser.setPasswordext("1.0");
+		securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 		int updateNum = securityUserMapper.updatePassword(securityUser);
 		//更新缓存中的密码
 		boolean bRet = (updateNum==1);
@@ -212,17 +287,23 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	public int updateNewEmail(long userId, String email, int status) throws Exception{
 		// TODO Auto-generated method stub
 		//更新用户表中的email信息，
-		SecurityUser securityUser = new SecurityUser();
+		SecurityUser securityUser = this.selectUserByemail(email);
+		if(securityUser==null)
+		{
+			return 0;
+		}
 		securityUser.setUserId(userId);
 		securityUser.setEmail(email);
 		securityUser.setEmailverified((int)(status&0xff));
+		//securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
+		//not user;
 		int verifyResult = securityUserMapper.verifyEmail(securityUser);
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
 			//查询是否有email和ID的对应关系
 			List<SecurityUserEmail> userEmails = securityUserEmailMapper.selectUserId(email);
-			//如果有对应关系，更新
+			//如果有对应关系，回滚
 			if(userEmails!=null && userEmails.size()>0)
 			{
 				SecurityUserEmail  securityUserEmail=userEmails.get(0);
@@ -551,6 +632,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		else
 		{
+			securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 			this.securityUserMapper.insertSecurityUser(securityUser);
 			SecurityUserPhone securityUserPhone = new SecurityUserPhone();
 			securityUserPhone.setPhone(securityUser.getPhone());

@@ -44,7 +44,7 @@ public interface SecurityUserMapper {
 	 * @param userId
 	 * @return
 	 */
-	@Select("SELECT userId,password,passwordExt,status FROM security_user where userId = #{userId}")
+	@Select("SELECT userId,password,passwordExt,email,phone,idNo,status FROM security_user where userId = #{userId}")
 	public List<SecurityUser> selectPasswordByid(long userId);
 	
 	/**
@@ -62,7 +62,7 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set password=#{password},passwordExt=#{passwordext} where userId = #{userId}")
+	@Update("update security_user set password=#{password},passwordExt=#{passwordext} where userId = #{userId} and passwordExt=#{oldPasswordext}")
 	public int updatePassword(SecurityUser securityUser);	
 	/**
 	 * 更新mail

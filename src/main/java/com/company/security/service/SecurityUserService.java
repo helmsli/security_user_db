@@ -44,8 +44,9 @@ public interface SecurityUserService {
 	 * @param pasword
 	 * @param algorithm  -- 加密校验字，用于比较是否验证的身份是合法的。约定好的字符串+pasword
 	 * @return
-	 */
+	
 	public boolean  checkPassword(long userId,String pasword,String algorithm);
+	*/
 	/**
 	 * 
 	 * @param userId

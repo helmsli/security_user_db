@@ -59,6 +59,10 @@ public class SecurityUser implements Serializable {
 	/** 密码扩展字段. */
 	private String passwordext;
 
+	
+	/** 密码扩展字段. */
+	private String oldPasswordext;
+
 	/** 邮箱. */
 	private String email;
 
@@ -245,19 +249,10 @@ public class SecurityUser implements Serializable {
 	public void setPasswordext(String passwordext) {
 		if(passwordext!=null)
 		{
-			if(passwordext.length()>8)
-			{
-				this.passwordext = passwordext.substring(0, 8);
-			}
-			else
-			{
-				this.passwordext=passwordext;
-			}
-		}
-		else
-		{
-			this.passwordext = passwordext;
-		}
+			
+				this.passwordext = passwordext;
+		}			
+		
 	}
 
 	/**
@@ -631,6 +626,14 @@ public class SecurityUser implements Serializable {
 	}
 
 	
+	public String getOldPasswordext() {
+		return oldPasswordext;
+	}
+
+	public void setOldPasswordext(String oldPasswordext) {
+		this.oldPasswordext = oldPasswordext;
+	}
+
 	public LoginUser getLoginUser()
 	{
 		LoginUser loginUser = new LoginUser();

@@ -29,7 +29,7 @@ import com.company.security.utils.SecurityUserAlgorithm;
 public class SecurityUserServiceImplTest {
 
 	@Autowired
-	private  SecurityUserService securityUserService;
+	private  SecurityUserService securityUserService1;
 	
 	@Autowired
 	private SecurityUserMapper securityUserMapper;
@@ -46,8 +46,11 @@ public class SecurityUserServiceImplTest {
 	@Autowired
 	private SecurityUserCacheService securityUserCacheService;
 	
+	SecurityUserServiceImpl securityUserService;
 	@Before
 	public void setUp() throws Exception {
+		securityUserService = (SecurityUserServiceImpl)securityUserService1;
+		 
 	}
 	/**
 	 * 创建默认的用户
@@ -248,7 +251,7 @@ public class SecurityUserServiceImplTest {
 		String oldPassword = securityUser.getPassword();
 		String newpasword = securityUser.getPassword()+"a";
 		transferCrc = SecurityUserAlgorithm.EncoderByMd5(this.transferUserKey, oldPassword);
-		bret =securityUserService.updatePassword(securityUser.getUserId(),newpasword , oldPassword, transferCrc);
+		 bret =securityUserService.updatePassword(securityUser.getUserId(),newpasword , oldPassword, transferCrc);
 		assertFalse("testCheckPassword updatePassword crc false error ",bret);
 		//验证老密码不正确不允许修改
 		transferCrc = SecurityUserAlgorithm.EncoderByMd5(this.transferUserKey, newpasword);
@@ -256,6 +259,7 @@ public class SecurityUserServiceImplTest {
 		assertFalse("testCheckPassword updatePassword oldpassword false error ",bret);
 		
 		//验证秘密错误没有修改数据库，确保最初的密码还能给校验通过
+	
 		transferCrc = SecurityUserAlgorithm.EncoderByMd5(this.transferUserKey, securityUser.getPassword());
 		bret = securityUserService.checkPassword(securityUser.getUserId(), securityUser.getPassword(), transferCrc);
 		assertTrue("testCheckPassword result true error ",bret);
