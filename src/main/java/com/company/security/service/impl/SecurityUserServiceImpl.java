@@ -1,5 +1,6 @@
 package com.company.security.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,6 +246,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setOldPasswordext(securityUser.getPassword());
 		securityUser.setPassword(newpasword);
 		securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
+		securityUser.setUpdatetime(Calendar.getInstance().getTime());
 		int updateNum = securityUserMapper.updatePassword(securityUser);
 		//更新缓存中的密码
 		boolean bRet = (updateNum==1);

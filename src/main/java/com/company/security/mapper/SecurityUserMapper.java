@@ -62,7 +62,7 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set password=#{password},passwordExt=#{passwordext} where userId = #{userId} and passwordExt=#{oldPasswordext}")
+	@Update("update security_user set password=#{password},passwordExt=#{passwordext},updateTime=#{updateTime} where userId = #{userId} and passwordExt=#{oldPasswordext}")
 	public int updatePassword(SecurityUser securityUser);	
 	/**
 	 * 更新mail
