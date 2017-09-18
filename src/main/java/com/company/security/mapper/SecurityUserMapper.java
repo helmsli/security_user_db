@@ -54,7 +54,7 @@ public interface SecurityUserMapper {
 	 */
 	@Update("update security_user set "
 			+ "userId=#{userId},loginName=#{loginname},lastName=#{lastname},firstName=#{firstname},displayName=#{displayname},"
-			+ "sex=#{sex},birthday=#{birthday},extDate=#{extdate},updateTime=#{updateTime} where userId = #{userId}")
+			+ "sex=#{sex},birthday=#{birthday},extDate=#{extdate},updateTime=#{updatetime} where userId = #{userId}")
 	public int updateSecurityUser(SecurityUser securityUser);	
 	
 	/**
@@ -62,7 +62,7 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set password=#{password},passwordExt=#{passwordext},updateTime=#{updateTime} where userId = #{userId} and passwordExt=#{oldPasswordext}")
+	@Update("update security_user set password=#{password},passwordExt=#{passwordext},updateTime=#{updatetime} where userId = #{userId} and passwordExt=#{oldPasswordext}")
 	public int updatePassword(SecurityUser securityUser);	
 	/**
 	 * 更新mail

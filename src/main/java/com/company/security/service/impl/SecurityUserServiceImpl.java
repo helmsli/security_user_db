@@ -197,9 +197,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			//比较老的密码是否是正确的。
 			if(crcOk&&oldPassword.equalsIgnoreCase(securityUser.getPassword()))
 			{
-				securityUser.setOldPasswordext(oldPassword);
+				securityUser.setOldPasswordext(securityUser.getPasswordext());
 				securityUser.setPassword(newpasword);
 				securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
+				securityUser.setUpdatetime(Calendar.getInstance().getTime());
 				int updateNum = securityUserMapper.updatePassword(securityUser);
 				boolean bRet = (updateNum==1); 
 				//更新缓存中的密码
@@ -243,7 +244,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		
 		//重置系统密码
 		SecurityUser securityUser =  securityUsers.get(0);
-		securityUser.setOldPasswordext(securityUser.getPassword());
+		securityUser.setOldPasswordext(securityUser.getPasswordext());
 		securityUser.setPassword(newpasword);
 		securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 		securityUser.setUpdatetime(Calendar.getInstance().getTime());
