@@ -33,7 +33,7 @@ public class SecurityUser implements Serializable {
 	//男
 	public static final int SEX_Male=0;
 	//女
-	public static final int SEX_FeMale=0;
+	public static final int SEX_FeMale=1;
 	
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
@@ -79,7 +79,7 @@ public class SecurityUser implements Serializable {
 	private int phoneverified;
 
 	/** 性别. */
-	private int sex;
+	private int sex=-1;
 
 	/** 生日. */
 	private Date birthday;
@@ -97,10 +97,10 @@ public class SecurityUser implements Serializable {
 	private String idno;
 
 	/** 证件类型. */
-	private int idtype;
+	private int idtype=-1;
 
 	/** 证件是否审核过. */
-	private int idverified;
+	private int idverified=-1;
 
 	/** 账户状态. */
 	private int status;

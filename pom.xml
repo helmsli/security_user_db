@@ -66,7 +66,11 @@
 			<scope>test</scope>
 		</dependency>
 		
-		
+		<!-- aop  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>	
 		
         <dependency>
 			<groupId>com.google.code.gson</groupId>
