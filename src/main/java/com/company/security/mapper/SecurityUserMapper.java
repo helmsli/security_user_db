@@ -19,13 +19,13 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 */
 	@Insert("INSERT INTO security_user(userId,loginName,lastName,firstName,displayName,password,"
-			+ "passwordExt,email,emailVerified,phone,phoneCCode,phoneVerified,sex,birthday,"
+			+ "passwordExt,email,emailVerified,phone,phoneCode,phoneVerified,sex,birthday,"
 			+ "avatar,homeAddress,businessAddress,idNo,idType,idVerified,"
 			+ "status,roles,extDate,createTime,createSource,updateTime) VALUES("
-			+ "#{userId},#{loginname},#{lastname},#{firstname},#{displayname},#{password},"
-			+ "#{passwordext},#{email},#{emailverified},#{phone},#{phoneccode},#{phoneverified},#{sex},#{birthday},"
-			+ "#{avatar},#{homeaddress},#{businessaddress},#{idno},#{idtype},#{idverified},"
-			+ "#{status},#{roles},#{extdate},#{createtime},#{createsource},#{updatetime})")	   
+			+ "#{userId},#{loginName},#{lastName},#{firstName},#{displayName},#{password},"
+			+ "#{passwordExt},#{email},#{emailVerified},#{phone},#{phoneCode},#{phoneVerified},#{sex},#{birthday},"
+			+ "#{avatar},#{homeAddress},#{businessAddress},#{idNo},#{idType},#{idVerified},"
+			+ "#{status},#{roles},#{extDate},#{createTime},#{createSource},#{updateTime})")	   
 	public void insertSecurityUser(SecurityUser securityUser);
 	
 	
@@ -53,8 +53,8 @@ public interface SecurityUserMapper {
 	 * @return
 	 */
 	@Update("update security_user set "
-			+ "userId=#{userId},loginName=#{loginname},lastName=#{lastname},firstName=#{firstname},displayName=#{displayname},"
-			+ "sex=#{sex},avatar=#{avatar},birthday=#{birthday},homeaddress=#{homeaddress},extDate=#{extdate},updateTime=#{updatetime} where userId = #{userId}")
+			+ "userId=#{userId},loginName=#{loginName},lastName=#{lastName},firstName=#{firstName},displayName=#{displayName},"
+			+ "sex=#{sex},avatar=#{avatar},birthday=#{birthday},homeaddress=#{homeAddress},extDate=#{extDate},updateTime=#{updateTime} where userId = #{userId}")
 	public int updateSecurityUser(SecurityUser securityUser);	
 	
 	/**
@@ -62,21 +62,21 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set password=#{password},passwordExt=#{passwordext},updateTime=#{updatetime} where userId = #{userId} and passwordExt=#{oldPasswordext}")
+	@Update("update security_user set password=#{password},passwordExt=#{passwordExt},updateTime=#{updateTime} where userId = #{userId} and passwordExt=#{oldPasswordExt}")
 	public int updatePassword(SecurityUser securityUser);	
 	/**
 	 * 更新mail
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set email=#{email},emailVerified=#{emailverified} where userId = #{userId}")
+	@Update("update security_user set email=#{email},emailVerified=#{emailVerified} where userId = #{userId}")
 	public int verifyEmail(SecurityUser securityUser);
 	/**
 	 * 更新电话号码
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set phone=#{phone},phoneCCode=#{phoneccode},phoneVerified=#{phoneverified} where userId = #{userId}")
+	@Update("update security_user set phone=#{phone},phoneCCode=#{phoneCode},phoneVerified=#{phoneVerified} where userId = #{userId}")
 	public int verifyPhone(SecurityUser securityUser);
 	
 	/**
@@ -84,7 +84,7 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set idNo=#{idno},idType=#{idtype},idVerified=#{idverified} where userId = #{userId}")
+	@Update("update security_user set idNo=#{idNo},idType=#{idType},idVerified=#{idVerified} where userId = #{userId}")
 	public int verifyIdNo(SecurityUser securityUser);
 	/**
 	 * 更新状态

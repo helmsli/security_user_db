@@ -52,7 +52,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	protected boolean checkDbCrc(SecurityUser securityUser)
 	{
 		String nowKey=getDbUserCrcKey(securityUser);
-		if(!nowKey.equalsIgnoreCase(securityUser.getPasswordext()))
+		if(!nowKey.equalsIgnoreCase(securityUser.getPasswordExt()))
 		{
 			return false;
 		}
@@ -145,7 +145,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			SecurityUser securityUser= selectUserById(userid.getUserId());
 			if(securityUser!=null)
 			{
-				if(idNo.equalsIgnoreCase(securityUser.getIdno()))
+				if(idNo.equalsIgnoreCase(securityUser.getIdNo()))
 				{
 					return securityUser;
 				}
@@ -197,10 +197,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			//比较老的密码是否是正确的。
 			if(crcOk&&oldPassword.equalsIgnoreCase(securityUser.getPassword()))
 			{
-				securityUser.setOldPasswordext(securityUser.getPasswordext());
+				securityUser.setOldPasswordExt(securityUser.getPasswordExt());
 				securityUser.setPassword(newpasword);
-				securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
-				securityUser.setUpdatetime(Calendar.getInstance().getTime());
+				securityUser.setPasswordExt(this.getDbUserCrcKey(securityUser));
+				securityUser.setUpdateTime(Calendar.getInstance().getTime());
 				int updateNum = securityUserMapper.updatePassword(securityUser);
 				boolean bRet = (updateNum==1); 
 				//更新缓存中的密码
@@ -209,6 +209,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 					LoginUser loginUser = new LoginUser();
 					loginUser.setUserId(securityUser.getUserId());
 					loginUser.setPhone(securityUser.getPhone());
+					this.securityUserCacheService.removeBasinInfo(securityUser.getUserId());
 					this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
 				}
 				return bRet;
@@ -244,10 +245,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		
 		//重置系统密码
 		SecurityUser securityUser =  securityUsers.get(0);
-		securityUser.setOldPasswordext(securityUser.getPasswordext());
+		securityUser.setOldPasswordExt(securityUser.getPasswordExt());
 		securityUser.setPassword(newpasword);
-		securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
-		securityUser.setUpdatetime(Calendar.getInstance().getTime());
+		securityUser.setPasswordExt(this.getDbUserCrcKey(securityUser));
+		securityUser.setUpdateTime(Calendar.getInstance().getTime());
 		int updateNum = securityUserMapper.updatePassword(securityUser);
 		//更新缓存中的密码
 		boolean bRet = (updateNum==1);
@@ -256,6 +257,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			LoginUser loginUser = new LoginUser();
 			loginUser.setUserId(securityUser.getUserId());
 			loginUser.setPhone(securityUser.getPhone());
+			this.securityUserCacheService.removeBasinInfo(securityUser.getUserId());
 			this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
 		}
 		return bRet;		
@@ -297,7 +299,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		securityUser.setUserId(userId);
 		securityUser.setEmail(email);
-		securityUser.setEmailverified((int)(status&0xff));
+		securityUser.setEmailVerified((int)(status&0xff));
 		//securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 		//not user;
 		int verifyResult = securityUserMapper.verifyEmail(securityUser);
@@ -366,7 +368,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
 		securityUser.setEmail("");
-		securityUser.setEmailverified(SecurityUser.verified_Fail);
+		securityUser.setEmailVerified(SecurityUser.verified_Fail);
 		int verfyResult = securityUserMapper.verifyEmail(securityUser);
 		//如果更新成功,并且验证状态成功
 		if(verfyResult==1)
@@ -399,8 +401,8 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
 		securityUser.setPhone(phone);
-		securityUser.setPhoneccode(countryCode);
-		securityUser.setPhoneverified((int)(status&0xff));
+		securityUser.setPhoneCode(countryCode);
+		securityUser.setPhoneVerified((int)(status&0xff));
 		int verifyResult = securityUserMapper.verifyPhone(securityUser);
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1&& status == securityUser.verified_Success)
@@ -471,8 +473,8 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
 		securityUser.setPhone("");
-		securityUser.setPhoneccode("");
-		securityUser.setPhoneverified(SecurityUser.verified_Fail);
+		securityUser.setPhoneCode("");
+		securityUser.setPhoneVerified(SecurityUser.verified_Fail);
 		int verifyResult = securityUserMapper.verifyPhone(securityUser);
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1)
@@ -504,9 +506,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		//更新用户表中的email信息，
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
-		securityUser.setIdtype(idType);
-		securityUser.setIdno(idNo);
-		securityUser.setIdverified((int)(status&0xff));
+		securityUser.setIdType(idType);
+		securityUser.setIdNo(idNo);
+		securityUser.setIdVerified((int)(status&0xff));
 		int verifyResult = securityUserMapper.verifyIdNo(securityUser);
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1&& status == securityUser.verified_Success)
@@ -572,9 +574,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	public int unbindIdNo(long userId, int idType, String idNo) {
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
-		securityUser.setIdtype(0x00);
-		securityUser.setIdno("");
-		securityUser.setIdverified(SecurityUser.verified_Fail);
+		securityUser.setIdType(0x00);
+		securityUser.setIdNo("");
+		securityUser.setIdVerified(SecurityUser.verified_Fail);
 		int verfyResult = securityUserMapper.verifyIdNo(securityUser);
 	//如果更新成功,并且验证状态成功
 		if(verfyResult==1)
@@ -624,7 +626,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		{
 			return SecurityUserConst.RESULT_Error_PhoneError;
 		}
-		if(securityUser.getPhoneverified()!=SecurityUser.verified_Success)
+		if(securityUser.getPhoneVerified()!=SecurityUser.verified_Success)
 		{
 			return SecurityUserConst.RESULT_Error_PhoneNotVerified;
 		}
@@ -635,7 +637,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		}
 		else
 		{
-			securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
+			securityUser.setPasswordExt(this.getDbUserCrcKey(securityUser));
 			this.securityUserMapper.insertSecurityUser(securityUser);
 			SecurityUserPhone securityUserPhone = new SecurityUserPhone();
 			securityUserPhone.setPhone(securityUser.getPhone());

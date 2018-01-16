@@ -42,41 +42,41 @@ public class SecurityUser implements Serializable {
 	private long userId;
 
 	/** 登录的名字. */
-	private String loginname;
+	private String loginName;
 
 	/** 姓. */
-	private String lastname;
+	private String lastName;
 
 	/** 名. */
-	private String firstname;
+	private String firstName;
 
 	/** 显示名字. */
-	private String displayname;
+	private String displayName;
 
 	/** 密码. */
 	private String password;
 
 	/** 密码扩展字段. */
-	private String passwordext;
+	private String passwordExt;
 
 	
 	/** 密码扩展字段. */
-	private String oldPasswordext;
+	private String oldPasswordExt;
 
 	/** 邮箱. */
 	private String email;
 
 	/** 邮箱认证状态. */
-	private int emailverified;
+	private int emailVerified;
 
 	/** 电话号码. 带国家码的号码，国家码开头是00*/
 	private String phone;
 
 	/** 电话号码国家码. */
-	private String phoneccode;
+	private String phoneCode;
 
 	/** 电话号码认证状态. */
-	private int phoneverified;
+	private int phoneVerified;
 
 	/** 性别. */
 	private int sex=-1;
@@ -88,19 +88,19 @@ public class SecurityUser implements Serializable {
 	private String avatar;
 
 	/** 家庭住址. */
-	private String homeaddress;
+	private String homeAddress;
 
 	/** 单位地址. */
-	private String businessaddress;
+	private String businessAddress;
 
 	/** 证件号码. */
-	private String idno;
+	private String idNo;
 
 	/** 证件类型. */
-	private int idtype=-1;
+	private int idType=-1;
 
 	/** 证件是否审核过. */
-	private int idverified=-1;
+	private int idVerified=-1;
 
 	/** 账户状态. */
 	private int status;
@@ -109,16 +109,16 @@ public class SecurityUser implements Serializable {
 	private String roles;
 
 	/** 扩展数据. */
-	private String extdate;
+	private String extDate;
 
 	/** 创建时间. */
-	private Date createtime;
+	private Date createTime;
 
 	/** 创建来源. */
-	private String createsource;
+	private String createSource;
 
 	/** 更新时间. */
-	private Date updatetime;
+	private Date updateTime;
 
 	/**
 	 * Constructor.
@@ -151,8 +151,8 @@ public class SecurityUser implements Serializable {
 	 * @param loginname
 	 *            登录的名字
 	 */
-	public void setLoginname(String loginname) {
-		this.loginname = loginname;
+	public void setLoginName(String loginname) {
+		this.loginName = loginname;
 	}
 
 	/**
@@ -160,8 +160,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 登录的名字
 	 */
-	public String getLoginname() {
-		return this.loginname;
+	public String getLoginName() {
+		return this.loginName;
 	}
 
 	/**
@@ -170,8 +170,8 @@ public class SecurityUser implements Serializable {
 	 * @param lastname
 	 *            姓
 	 */
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastname) {
+		this.lastName = lastname;
 	}
 
 	/**
@@ -179,8 +179,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 姓
 	 */
-	public String getLastname() {
-		return this.lastname;
+	public String getLastName() {
+		return this.lastName;
 	}
 
 	/**
@@ -189,8 +189,8 @@ public class SecurityUser implements Serializable {
 	 * @param firstname
 	 *            名
 	 */
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstname) {
+		this.firstName = firstname;
 	}
 
 	/**
@@ -198,8 +198,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 名
 	 */
-	public String getFirstname() {
-		return this.firstname;
+	public String getFirstName() {
+		return this.firstName;
 	}
 
 	/**
@@ -208,8 +208,8 @@ public class SecurityUser implements Serializable {
 	 * @param displayname
 	 *            显示名字
 	 */
-	public void setDisplayname(String displayname) {
-		this.displayname = displayname;
+	public void setDisplayName(String displayname) {
+		this.displayName = displayname;
 	}
 
 	/**
@@ -217,8 +217,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 显示名字
 	 */
-	public String getDisplayname() {
-		return this.displayname;
+	public String getDisplayName() {
+		return this.displayName;
 	}
 
 	/**
@@ -246,11 +246,11 @@ public class SecurityUser implements Serializable {
 	 * @param passwordext
 	 *            密码扩展字段
 	 */
-	public void setPasswordext(String passwordext) {
+	public void setPasswordExt(String passwordext) {
 		if(passwordext!=null)
 		{
 			
-				this.passwordext = passwordext;
+				this.passwordExt = passwordext;
 		}			
 		
 	}
@@ -260,8 +260,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 密码扩展字段
 	 */
-	public String getPasswordext() {
-		return this.passwordext;
+	public String getPasswordExt() {
+		return this.passwordExt;
 	}
 
 	/**
@@ -289,8 +289,8 @@ public class SecurityUser implements Serializable {
 	 * @param emailverified
 	 *            邮箱认证状态
 	 */
-	public void setEmailverified(int emailverified) {
-		this.emailverified = emailverified;
+	public void setEmailVerified(int emailverified) {
+		this.emailVerified = emailverified;
 	}
 
 	/**
@@ -298,8 +298,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 邮箱认证状态
 	 */
-	public int getEmailverified() {
-		return this.emailverified;
+	public int getEmailVerified() {
+		return this.emailVerified;
 	}
 
 	/**
@@ -327,8 +327,8 @@ public class SecurityUser implements Serializable {
 	 * @param phoneccode
 	 *            电话号码国家码
 	 */
-	public void setPhoneccode(String phoneccode) {
-		this.phoneccode = phoneccode;
+	public void setPhoneCode(String phoneccode) {
+		this.phoneCode = phoneccode;
 	}
 
 	/**
@@ -336,8 +336,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 电话号码国家码
 	 */
-	public String getPhoneccode() {
-		return this.phoneccode;
+	public String getPhoneCode() {
+		return this.phoneCode;
 	}
 
 	/**
@@ -346,8 +346,8 @@ public class SecurityUser implements Serializable {
 	 * @param phoneverified
 	 *            电话号码认证状态
 	 */
-	public void setPhoneverified(int phoneverified) {
-		this.phoneverified = phoneverified;
+	public void setPhoneVerified(int phoneverified) {
+		this.phoneVerified = phoneverified;
 	}
 
 	/**
@@ -355,8 +355,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 电话号码认证状态
 	 */
-	public int getPhoneverified() {
-		return this.phoneverified;
+	public int getPhoneVerified() {
+		return this.phoneVerified;
 	}
 
 	/**
@@ -422,8 +422,8 @@ public class SecurityUser implements Serializable {
 	 * @param homeaddress
 	 *            家庭住址
 	 */
-	public void setHomeaddress(String homeaddress) {
-		this.homeaddress = homeaddress;
+	public void setHomeAddress(String homeaddress) {
+		this.homeAddress = homeaddress;
 	}
 
 	/**
@@ -431,8 +431,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 家庭住址
 	 */
-	public String getHomeaddress() {
-		return this.homeaddress;
+	public String getHomeAddress() {
+		return this.homeAddress;
 	}
 
 	/**
@@ -441,8 +441,8 @@ public class SecurityUser implements Serializable {
 	 * @param businessaddress
 	 *            单位地址
 	 */
-	public void setBusinessaddress(String businessaddress) {
-		this.businessaddress = businessaddress;
+	public void setBusinessAddress(String businessaddress) {
+		this.businessAddress = businessaddress;
 	}
 
 	/**
@@ -450,8 +450,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 单位地址
 	 */
-	public String getBusinessaddress() {
-		return this.businessaddress;
+	public String getBusinessAddress() {
+		return this.businessAddress;
 	}
 
 	/**
@@ -460,8 +460,8 @@ public class SecurityUser implements Serializable {
 	 * @param idno
 	 *            证件号码
 	 */
-	public void setIdno(String idno) {
-		this.idno = idno;
+	public void setIdNo(String idno) {
+		this.idNo = idno;
 	}
 
 	/**
@@ -469,8 +469,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 证件号码
 	 */
-	public String getIdno() {
-		return this.idno;
+	public String getIdNo() {
+		return this.idNo;
 	}
 
 	/**
@@ -479,8 +479,8 @@ public class SecurityUser implements Serializable {
 	 * @param idtype
 	 *            证件类型
 	 */
-	public void setIdtype(int idtype) {
-		this.idtype = idtype;
+	public void setIdType(int idtype) {
+		this.idType = idtype;
 	}
 
 	/**
@@ -488,8 +488,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 证件类型
 	 */
-	public int getIdtype() {
-		return this.idtype;
+	public int getIdType() {
+		return this.idType;
 	}
 
 	/**
@@ -498,8 +498,8 @@ public class SecurityUser implements Serializable {
 	 * @param idverified
 	 *            证件是否审核过
 	 */
-	public void setIdverified(int idverified) {
-		this.idverified = idverified;
+	public void setIdVerified(int idverified) {
+		this.idVerified = idverified;
 	}
 
 	/**
@@ -507,8 +507,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 证件是否审核过
 	 */
-	public int getIdverified() {
-		return this.idverified;
+	public int getIdVerified() {
+		return this.idVerified;
 	}
 
 	/**
@@ -555,8 +555,8 @@ public class SecurityUser implements Serializable {
 	 * @param extdate
 	 *            扩展数据
 	 */
-	public void setExtdate(String extdate) {
-		this.extdate = extdate;
+	public void setExtDate(String extdate) {
+		this.extDate = extdate;
 	}
 
 	/**
@@ -564,8 +564,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 扩展数据
 	 */
-	public String getExtdate() {
-		return this.extdate;
+	public String getExtDate() {
+		return this.extDate;
 	}
 
 	/**
@@ -574,8 +574,8 @@ public class SecurityUser implements Serializable {
 	 * @param createtime
 	 *            创建时间
 	 */
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
+	public void setCreateTime(Date createtime) {
+		this.createTime = createtime;
 	}
 
 	/**
@@ -583,8 +583,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 创建时间
 	 */
-	public Date getCreatetime() {
-		return this.createtime;
+	public Date getCreateTime() {
+		return this.createTime;
 	}
 
 	/**
@@ -593,8 +593,8 @@ public class SecurityUser implements Serializable {
 	 * @param createsource
 	 *            创建来源
 	 */
-	public void setCreatesource(String createsource) {
-		this.createsource = createsource;
+	public void setCreateSource(String createsource) {
+		this.createSource = createsource;
 	}
 
 	/**
@@ -602,8 +602,8 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 创建来源
 	 */
-	public String getCreatesource() {
-		return this.createsource;
+	public String getCreateSource() {
+		return this.createSource;
 	}
 
 	/**
@@ -612,8 +612,8 @@ public class SecurityUser implements Serializable {
 	 * @param updatetime
 	 *            更新时间
 	 */
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdateTime(Date updatetime) {
+		this.updateTime = updatetime;
 	}
 
 	/**
@@ -621,32 +621,32 @@ public class SecurityUser implements Serializable {
 	 * 
 	 * @return 更新时间
 	 */
-	public Date getUpdatetime() {
-		return this.updatetime;
+	public Date getUpdateTime() {
+		return this.updateTime;
 	}
 
 	
-	public String getOldPasswordext() {
-		return oldPasswordext;
+	public String getOldPasswordExt() {
+		return oldPasswordExt;
 	}
 
-	public void setOldPasswordext(String oldPasswordext) {
-		this.oldPasswordext = oldPasswordext;
+	public void setOldPasswordExt(String oldPasswordext) {
+		this.oldPasswordExt = oldPasswordext;
 	}
 
 	public LoginUser getLoginUser()
 	{
 		LoginUser loginUser = new LoginUser();
 		loginUser.setAvatar(this.getAvatar());
-		loginUser.setDisplayname(this.getDisplayname());
+		loginUser.setDisplayName(this.getDisplayName());
 		loginUser.setEmail(this.getEmail());
-		loginUser.setEmailverified(this.getEmailverified());
-		loginUser.setLoginname(this.getLoginname());
+		loginUser.setEmailVerified(this.getEmailVerified());
+		loginUser.setLoginName(this.getLoginName());
 		loginUser.setPassword(this.getPassword());
-		loginUser.setPasswordext(this.getPasswordext());
+		loginUser.setPasswordExt(this.getPasswordExt());
 		loginUser.setPhone(this.getPhone());
-		loginUser.setPhoneccode(this.getPhoneccode());
-		loginUser.setPhoneverified(this.getPhoneverified());
+		loginUser.setPhoneCode(this.getPhoneCode());
+		loginUser.setPhoneVerified(this.getPhoneVerified());
 		loginUser.setRoles(this.getRoles());
 		loginUser.setSex(this.getSex());
 		loginUser.setStatus(this.getStatus());
@@ -656,15 +656,16 @@ public class SecurityUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SecurityUser [userId=" + userId + ", loginname=" + loginname + ", lastname=" + lastname + ", firstname="
-				+ firstname + ", displayname=" + displayname + ", password=" + password + ", passwordext=" + passwordext
-				+ ", email=" + email + ", emailverified=" + emailverified + ", phone=" + phone + ", phoneccode="
-				+ phoneccode + ", phoneverified=" + phoneverified + ", sex=" + sex + ", birthday=" + birthday
-				+ ", avatar=" + avatar + ", homeaddress=" + homeaddress + ", businessaddress=" + businessaddress
-				+ ", idno=" + idno + ", idtype=" + idtype + ", idverified=" + idverified + ", status=" + status
-				+ ", roles=" + roles + ", extdate=" + extdate + ", createtime=" + createtime + ", createsource="
-				+ createsource + ", updatetime=" + updatetime + "]";
+		return "SecurityUser [userId=" + userId + ", loginName=" + loginName + ", lastName=" + lastName + ", firstName="
+				+ firstName + ", displayName=" + displayName + ", password=" + password + ", passwordExt=" + passwordExt
+				+ ", oldPasswordExt=" + oldPasswordExt + ", email=" + email + ", emailVerified=" + emailVerified
+				+ ", phone=" + phone + ", phoneCode=" + phoneCode + ", phoneVerified=" + phoneVerified + ", sex=" + sex
+				+ ", birthday=" + birthday + ", avatar=" + avatar + ", homeAddress=" + homeAddress
+				+ ", businessAddress=" + businessAddress + ", idNo=" + idNo + ", idType=" + idType + ", idVerified="
+				+ idVerified + ", status=" + status + ", roles=" + roles + ", extDate=" + extDate + ", createTime="
+				+ createTime + ", createSource=" + createSource + ", updateTime=" + updateTime + "]";
 	}
+
 	
 
 }
