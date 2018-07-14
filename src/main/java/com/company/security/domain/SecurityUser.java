@@ -3,6 +3,8 @@ package com.company.security.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Model class of security_user.
  * 
@@ -82,6 +84,7 @@ public class SecurityUser implements Serializable {
 	private int sex=-1;
 
 	/** 生日. */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	private Date birthday;
 
 	/** 头像地址. */
@@ -105,25 +108,28 @@ public class SecurityUser implements Serializable {
 	/** 账户状态. */
 	private int status;
 
-	/** 拥有的角色. */
-	private String roles;
+	/** 拥有的角色.   0--买家/普通用户，注册默认用户    1-- 卖家/讲师     255--超级管理员 */
+	private String roles="0";
 
 	/** 扩展数据. */
 	private String extDate;
 
 	/** 创建时间. */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 
 	/** 创建来源. */
 	private String createSource;
 
 	/** 更新时间. */
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 
 	/**
 	 * Constructor.
 	 */
 	public SecurityUser() {
+		this.setRoles("0");
 	}
 
 	/**

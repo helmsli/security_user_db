@@ -1,3 +1,4 @@
+
 package com.company.security.service.impl;
 
 import static org.junit.Assert.*;
@@ -64,7 +65,7 @@ public class SecurityUserServiceImplTest {
 		now.set(now.MILLISECOND, 0);
 		
 		securityUser.setBirthday(now.getTime());
-		securityUser.setBusinessaddress("setBusinessaddress");
+		securityUser.setBusinessAddress("setBusinessaddress");
 		securityUser.setCreatesource("createsource");
 		now.add(now.MINUTE, 20);
 		securityUser.setCreatetime(now.getTime());

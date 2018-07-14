@@ -54,7 +54,7 @@ public interface SecurityUserMapper {
 	 */
 	@Update("update security_user set "
 			+ "userId=#{userId},loginName=#{loginName},lastName=#{lastName},firstName=#{firstName},displayName=#{displayName},"
-			+ "sex=#{sex},avatar=#{avatar},birthday=#{birthday},homeaddress=#{homeAddress},extDate=#{extDate},updateTime=#{updateTime} where userId = #{userId}")
+			+ "sex=#{sex},avatar=#{avatar},birthday=#{birthday},homeaddress=#{homeAddress},idNo=#{idNo},idType=#{idType},email=#{email},extDate=#{extDate},businessAddress=#{businessAddress},updateTime=#{updateTime},roles=#{roles} where userId = #{userId}")
 	public int updateSecurityUser(SecurityUser securityUser);	
 	
 	/**

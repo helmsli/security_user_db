@@ -86,7 +86,11 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/security_access_service.jar</systemPath>
 		</dependency>
-
+	<dependency>
+			<groupId>com.xinwei.nnl</groupId>
+			<artifactId>nnl-commons</artifactId>
+			<version>1.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
