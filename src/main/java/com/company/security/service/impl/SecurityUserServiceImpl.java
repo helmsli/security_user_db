@@ -509,7 +509,12 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setIdType(idType);
 		securityUser.setIdNo(idNo);
 		securityUser.setIdVerified((int)(status&0xff));
-		int verifyResult = securityUserMapper.verifyIdNo(securityUser);
+		int verifyResult=1;
+		//如果是身份证或者护照
+		if(idType==4||idType==5)
+		{
+			verifyResult = securityUserMapper.verifyIdNo(securityUser);
+		}
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
@@ -629,6 +634,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		if(securityUser.getPhoneVerified()!=SecurityUser.verified_Success)
 		{
 			return SecurityUserConst.RESULT_Error_PhoneNotVerified;
+		}
+		if(StringUtils.isEmpty(securityUser.getPassword()))
+		{
+			return SecurityUserConst.RESULT_Error_Password;
 		}
 		List<SecurityUserPhone> userids = this.securityUserPhoneMapper.selectUserId(securityUser.getPhone());
 		if(userids!=null && userids.size()>0)

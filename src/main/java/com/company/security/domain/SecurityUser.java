@@ -108,7 +108,7 @@ public class SecurityUser implements Serializable {
 	/** 账户状态. */
 	private int status;
 
-	/** 拥有的角色.   0--买家/普通用户，注册默认用户    1-- 卖家/讲师     255--超级管理员 */
+	/** 拥有的角色.   0--买家/普通用户，注册默认用户    1-- 卖家/讲师     255--超级管理员    10 --讲师待审核*/
 	private String roles="0";
 
 	/** 扩展数据. */

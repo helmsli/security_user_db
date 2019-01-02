@@ -29,4 +29,6 @@ public class SecurityUserConst {
      */
     public static final int RESULT_Error_PhoneNotVerified = RESULT_Error_startCode+6;
     
+    public static final int RESULT_Error_Password = RESULT_Error_startCode+7;
+    
 }
