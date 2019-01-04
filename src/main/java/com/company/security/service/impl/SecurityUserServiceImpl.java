@@ -145,10 +145,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			SecurityUser securityUser= selectUserById(userid.getUserId());
 			if(securityUser!=null)
 			{
-				if(idNo.equalsIgnoreCase(securityUser.getIdNo()))
-				{
-					return securityUser;
-				}
+				
+				return securityUser;
+				
 			}
 		}
 		return null;
