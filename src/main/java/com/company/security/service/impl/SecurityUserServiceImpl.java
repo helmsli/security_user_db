@@ -3,6 +3,8 @@ package com.company.security.service.impl;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import com.company.security.service.SecurityUserService;
 import com.company.security.utils.SecurityUserAlgorithm;
 @Service("securityUserService")
 public class SecurityUserServiceImpl implements SecurityUserService {
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	private SecurityUserMapper securityUserMapper;
 	
@@ -393,7 +397,6 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	 * @return
 	 * @throws Exception
 	 */
-	@Transactional 
 	public int updatePhone(long userId , String countryCode, String phone, int status) throws Exception{
 		// TODO Auto-generated method stub
 		//更新用户表中的email信息，
@@ -402,7 +405,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setPhone(phone);
 		securityUser.setPhoneCode(countryCode);
 		securityUser.setPhoneVerified((int)(status&0xff));
+		
 		int verifyResult = securityUserMapper.verifyPhone(securityUser);
+		
 		//如果更新成功,并且验证状态成功
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{

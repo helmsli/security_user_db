@@ -76,7 +76,7 @@ public interface SecurityUserMapper {
 	 * @param securityUser
 	 * @return
 	 */
-	@Update("update security_user set phone=#{phone},phoneCCode=#{phoneCode},phoneVerified=#{phoneVerified} where userId = #{userId}")
+	@Update("update security_user set phone=#{phone},phoneCode=#{phoneCode},phoneVerified=#{phoneVerified} where userId = #{userId}")
 	public int verifyPhone(SecurityUser securityUser);
 	
 	/**
