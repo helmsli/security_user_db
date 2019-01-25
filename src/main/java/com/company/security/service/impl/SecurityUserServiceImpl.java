@@ -49,7 +49,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	private String transferUserKey;
 	
 	/**
-	 * 比较数据库是否有人篡改过
+	 * 姣旇緝鏁版嵁搴撴槸鍚︽湁浜虹鏀硅繃
 	 * @param securityUser
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		return true;
 	}
 	/**
-	 * 获取数据库签名
+	 * 鑾峰彇鏁版嵁搴撶鍚�
 	 * @param securityUser
 	 * @return
 	 */
@@ -186,18 +186,18 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	@Override
 	public boolean updatePassword(long userId, String newpasword, String oldPassword, String algorithm) {
 		// TODO Auto-generated method stub
-		//判断是否传输是合法的
+		//鍒ゆ柇鏄惁浼犺緭鏄悎娉曠殑
 		if(!SecurityUserAlgorithm.checkByMd5(this.transferUserKey, newpasword, algorithm))
 		{
 			return false;
 		}
-		//获取用户的密码信息，
+		//鑾峰彇鐢ㄦ埛鐨勫瘑鐮佷俊鎭紝
 		List<SecurityUser> securityUsers= securityUserMapper.selectPasswordByid(userId);
 		if(securityUsers!=null&& securityUsers.size()>0)
 		{
 			SecurityUser securityUser =  securityUsers.get(0);
 			boolean crcOk = this.checkDbCrc(securityUser);
-			//比较老的密码是否是正确的。
+			//姣旇緝鑰佺殑瀵嗙爜鏄惁鏄纭殑銆�
 			if(crcOk&&oldPassword.equalsIgnoreCase(securityUser.getPassword()))
 			{
 				securityUser.setOldPasswordExt(securityUser.getPasswordExt());
@@ -206,16 +206,27 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				securityUser.setUpdateTime(Calendar.getInstance().getTime());
 				int updateNum = securityUserMapper.updatePassword(securityUser);
 				boolean bRet = (updateNum==1); 
-				//更新缓存中的密码
+				//鏇存柊缂撳瓨涓殑瀵嗙爜
 				if(bRet)
 				{
 					LoginUser loginUser = new LoginUser();
 					loginUser.setUserId(securityUser.getUserId());
 					loginUser.setPhone(securityUser.getPhone());
+					logger.debug("remove user:"+ securityUser.getUserId()) ;
 					this.securityUserCacheService.removeBasinInfo(securityUser.getUserId());
 					this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
 				}
 				return bRet;
+			}
+			else
+			{
+				LoginUser loginUser = new LoginUser();
+				loginUser.setUserId(securityUser.getUserId());
+				loginUser.setPhone(securityUser.getPhone());
+				logger.debug("remove user:"+ securityUser.getUserId()) ;
+				this.securityUserCacheService.removeBasinInfo(securityUser.getUserId());
+				this.securityUserCacheService.putLastModifyTime(loginUser, System.currentTimeMillis());
+			
 			}
 			
 		}		
@@ -240,20 +251,20 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 			return false;
 		}
 		List<SecurityUser> securityUsers = this.securityUserMapper.selectPasswordByid(userId);
-		//如果用户不存在
+		//濡傛灉鐢ㄦ埛涓嶅瓨鍦�
 		if(securityUsers==null||securityUsers.size()==0)
 		{
 				return false;
 		}	
 		
-		//重置系统密码
+		//閲嶇疆绯荤粺瀵嗙爜
 		SecurityUser securityUser =  securityUsers.get(0);
 		securityUser.setOldPasswordExt(securityUser.getPasswordExt());
 		securityUser.setPassword(newpasword);
 		securityUser.setPasswordExt(this.getDbUserCrcKey(securityUser));
 		securityUser.setUpdateTime(Calendar.getInstance().getTime());
 		int updateNum = securityUserMapper.updatePassword(securityUser);
-		//更新缓存中的密码
+		//鏇存柊缂撳瓨涓殑瀵嗙爜
 		boolean bRet = (updateNum==1);
 		if(bRet)
 		{
@@ -294,7 +305,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	@Transactional 
 	public int updateNewEmail(long userId, String email, int status) throws Exception{
 		// TODO Auto-generated method stub
-		//更新用户表中的email信息，
+		//鏇存柊鐢ㄦ埛琛ㄤ腑鐨別mail淇℃伅锛�
 		SecurityUser securityUser = this.selectUserByemail(email);
 		if(securityUser==null)
 		{
@@ -306,12 +317,12 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		//securityUser.setPasswordext(this.getDbUserCrcKey(securityUser));
 		//not user;
 		int verifyResult = securityUserMapper.verifyEmail(securityUser);
-		//如果更新成功,并且验证状态成功
+		//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
-			//查询是否有email和ID的对应关系
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
 			List<SecurityUserEmail> userEmails = securityUserEmailMapper.selectUserId(email);
-			//如果有对应关系，回滚
+			//濡傛灉鏈夊搴斿叧绯伙紝鍥炴粴
 			if(userEmails!=null && userEmails.size()>0)
 			{
 				SecurityUserEmail  securityUserEmail=userEmails.get(0);
@@ -319,7 +330,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 				throw new RuntimeException();
 				//verfyResult = securityUserEmailMapper.updateUserEmail(securityUserEmail);
 			}
-			//否则修改
+			//鍚﹀垯淇敼
 			else
 			{
 				SecurityUserEmail  securityUserEmail=new SecurityUserEmail();
@@ -373,10 +384,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setEmail("");
 		securityUser.setEmailVerified(SecurityUser.verified_Fail);
 		int verfyResult = securityUserMapper.verifyEmail(securityUser);
-		//如果更新成功,并且验证状态成功
+		//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verfyResult==1)
 		{
-			//查询是否有email和ID的对应关系
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
 			securityUserEmailMapper.deleteUserEmail(email);
 			LoginUser loginUser = new LoginUser();
 			loginUser.setUserId(securityUser.getUserId());
@@ -392,35 +403,44 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	 * 
 	 * @param userId
 	 * @param countryCode
-	 * @param phone 代国家吗的全号码；
+	 * @param phone 浠ｅ浗瀹跺悧鐨勫叏鍙风爜锛�
 	 * @param status
 	 * @return
 	 * @throws Exception
 	 */
 	public int updatePhone(long userId , String countryCode, String phone, int status) throws Exception{
 		// TODO Auto-generated method stub
-		//更新用户表中的email信息，
+		//鏇存柊鐢ㄦ埛琛ㄤ腑鐨別mail淇℃伅锛�
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
 		securityUser.setPhone(phone);
 		securityUser.setPhoneCode(countryCode);
 		securityUser.setPhoneVerified((int)(status&0xff));
 		
+		List<SecurityUserPhone> userIds = this.securityUserPhoneMapper.selectUserId(phone);
+		//濡傛灉鏈夊搴斿叧绯伙紝鏇存柊
+		if(userIds!=null && userIds.size()>0)
+		{
+			
+			return SecurityUserConst.RESULT_Error_PhoneExist;
+			//verfyResult = securityUserEmailMapper.updateUserEmail(securityUserEmail);
+		}
+		
 		int verifyResult = securityUserMapper.verifyPhone(securityUser);
 		
-		//如果更新成功,并且验证状态成功
+		//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
-			//查询是否有email和ID的对应关系
-			List<SecurityUserPhone> userIds = this.securityUserPhoneMapper.selectUserId(phone);
-			//如果有对应关系，更新
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
+			userIds = this.securityUserPhoneMapper.selectUserId(phone);
+			//濡傛灉鏈夊搴斿叧绯伙紝鏇存柊
 			if(userIds!=null && userIds.size()>0)
 			{
 				
 				throw new RuntimeException();
 				//verfyResult = securityUserEmailMapper.updateUserEmail(securityUserEmail);
 			}
-			//否则修改
+			//鍚﹀垯淇敼
 			else
 			{
 				SecurityUserPhone  userMaps=new SecurityUserPhone();
@@ -480,10 +500,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setPhoneCode("");
 		securityUser.setPhoneVerified(SecurityUser.verified_Fail);
 		int verifyResult = securityUserMapper.verifyPhone(securityUser);
-		//如果更新成功,并且验证状态成功
+		//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verifyResult==1)
 		{
-			//查询是否有email和ID的对应关系
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
 			securityUserPhoneMapper.deleteUserPhone(phone);
 			LoginUser loginUser = new LoginUser();
 			loginUser.setUserId(securityUser.getUserId());
@@ -507,31 +527,31 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 	@Transactional 
 	public int updateIdNo(long userId , int idType, String idNo, int status) throws Exception{
 		// TODO Auto-generated method stub
-		//更新用户表中的email信息，
+		//鏇存柊鐢ㄦ埛琛ㄤ腑鐨別mail淇℃伅锛�
 		SecurityUser securityUser = new SecurityUser();
 		securityUser.setUserId(userId);
 		securityUser.setIdType(idType);
 		securityUser.setIdNo(idNo);
 		securityUser.setIdVerified((int)(status&0xff));
 		int verifyResult=1;
-		//如果是身份证或者护照
+		//濡傛灉鏄韩浠借瘉鎴栬�呮姢鐓�
 		if(idType==4||idType==5)
 		{
 			verifyResult = securityUserMapper.verifyIdNo(securityUser);
 		}
-		//如果更新成功,并且验证状态成功
+		//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verifyResult==1&& status == securityUser.verified_Success)
 		{
-			//查询是否有email和ID的对应关系
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
 			List<SecurityUserIdno> userIds = this.securityUserIdnoMapper.selectUserId(SecurityUserIdno.getIdtotalno(idType, idNo));
-			//如果有对应关系，更新
+			//濡傛灉鏈夊搴斿叧绯伙紝鏇存柊
 			if(userIds!=null && userIds.size()>0)
 			{
 				
 				throw new RuntimeException();
 				//verfyResult = securityUserEmailMapper.updateUserEmail(securityUserEmail);
 			}
-			//否则修改
+			//鍚﹀垯淇敼
 			else
 			{
 				SecurityUserIdno  userMaps=new SecurityUserIdno();
@@ -587,10 +607,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 		securityUser.setIdNo("");
 		securityUser.setIdVerified(SecurityUser.verified_Fail);
 		int verfyResult = securityUserMapper.verifyIdNo(securityUser);
-	//如果更新成功,并且验证状态成功
+	//濡傛灉鏇存柊鎴愬姛,骞朵笖楠岃瘉鐘舵�佹垚鍔�
 		if(verfyResult==1)
 		{
-			//查询是否有email和ID的对应关系
+			//鏌ヨ鏄惁鏈塭mail鍜孖D鐨勫搴斿叧绯�
 			this.securityUserIdnoMapper.deleteUserIdNo(SecurityUserIdno.getIdtotalno(idType, idNo));
 			LoginUser loginUser = new LoginUser();
 			loginUser.setUserId(securityUser.getUserId());
